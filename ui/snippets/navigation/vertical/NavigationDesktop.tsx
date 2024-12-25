@@ -1,4 +1,4 @@
-import { Flex, Box, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Box, VStack, useColorModeValue, HStack } from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
@@ -12,6 +12,7 @@ import NetworkLogo from 'ui/snippets/networkMenu/NetworkLogo';
 import NetworkMenu from 'ui/snippets/networkMenu/NetworkMenu';
 
 import TestnetBadge from '../TestnetBadge';
+import MenuIcon from './assets/MenuIcon.png';
 import NavLink from './NavLink';
 import NavLinkGroup from './NavLinkGroup';
 import NavLinkRewards from './NavLinkRewards';
@@ -20,7 +21,10 @@ const NavigationDesktop = () => {
   const appProps = useAppContext();
   const cookiesString = appProps.cookies;
 
-  const isNavBarCollapsedCookie = cookies.get(cookies.NAMES.NAV_BAR_COLLAPSED, cookiesString);
+  const isNavBarCollapsedCookie = cookies.get(
+    cookies.NAMES.NAV_BAR_COLLAPSED,
+    cookiesString,
+  );
   let isNavBarCollapsed;
   if (isNavBarCollapsedCookie === 'true') {
     isNavBarCollapsed = true;
@@ -33,18 +37,26 @@ const NavigationDesktop = () => {
 
   const isAuth = useIsAuth();
 
-  const [ isCollapsed, setCollapsedState ] = React.useState<boolean | undefined>(isNavBarCollapsed);
+  const [ isCollapsed, setCollapsedState ] = React.useState<boolean | undefined>(
+    isNavBarCollapsed,
+  );
 
   const handleTogglerClick = React.useCallback(() => {
     setCollapsedState((flag) => !flag);
-    cookies.set(cookies.NAMES.NAV_BAR_COLLAPSED, isCollapsed ? 'false' : 'true');
+    cookies.set(
+      cookies.NAMES.NAV_BAR_COLLAPSED,
+      isCollapsed ? 'false' : 'true',
+    );
   }, [ isCollapsed ]);
 
-  const handleContainerClick = React.useCallback((event: React.MouseEvent) => {
-    if (event.target === event.currentTarget) {
-      handleTogglerClick();
-    }
-  }, [ handleTogglerClick ]);
+  const handleContainerClick = React.useCallback(
+    (event: React.MouseEvent) => {
+      if (event.target === event.currentTarget) {
+        handleTogglerClick();
+      }
+    },
+    [ handleTogglerClick ],
+  );
 
   const chevronIconStyles = {
     bgColor: useColorModeValue('white', 'black'),
@@ -65,44 +77,77 @@ const NavigationDesktop = () => {
       borderColor="divider"
       px={{ lg: isExpanded ? 6 : 4, xl: isCollapsed ? 4 : 6 }}
       py={ 12 }
-      width={{ lg: isExpanded ? '229px' : '92px', xl: isCollapsed ? '92px' : '229px' }}
+      width={{
+        lg: isExpanded ? '229px' : '92px',
+        xl: isCollapsed ? '92px' : '229px',
+      }}
       { ...getDefaultTransitionProps({ transitionProperty: 'width, padding' }) }
       onClick={ handleContainerClick }
     >
       <TestnetBadge position="absolute" pl={ 3 } w="49px" top="34px"/>
-      <Box
-        as="header"
-        display="flex"
-        justifyContent="flex-start"
-        alignItems="center"
-        flexDirection="row"
-        w="100%"
-        pl={{ lg: isExpanded ? 3 : '15px', xl: isCollapsed ? '15px' : 3 }}
-        pr={{ lg: isExpanded ? 0 : '15px', xl: isCollapsed ? '15px' : 0 }}
-        h={ 10 }
-        transitionProperty="padding"
-        transitionDuration="normal"
-        transitionTimingFunction="ease"
-      >
-        <NetworkLogo isCollapsed={ isCollapsed }/>
-        { Boolean(config.UI.navigation.featuredNetworks) && <NetworkMenu isCollapsed={ isCollapsed }/> }
-      </Box>
+      <HStack justifyContent="space-between" alignItems="center">
+        <Box
+          as="header"
+          display="flex"
+          justifyContent="flex-start"
+          alignItems="center"
+          flexDirection="row"
+          w="100%"
+          pl={{ lg: isExpanded ? 3 : '15px', xl: isCollapsed ? '15px' : 3 }}
+          pr={{ lg: isExpanded ? 0 : '15px', xl: isCollapsed ? '15px' : 0 }}
+          h={ 10 }
+          transitionProperty="padding"
+          transitionDuration="normal"
+          transitionTimingFunction="ease"
+        >
+          <NetworkLogo isCollapsed={ isCollapsed }/>
+          { Boolean(config.UI.navigation.featuredNetworks) && (
+            <NetworkMenu isCollapsed={ isCollapsed }/>
+          ) }
+        </Box>
+        <img
+          src={ MenuIcon.src }
+          alt="Menu icon"
+          style={{ width: '36px', height: '36px' }}
+        />
+      </HStack>
       <Box as="nav" mt={ 6 } w="100%">
         <VStack as="ul" spacing="1" alignItems="flex-start">
           { mainNavItems.map((item) => {
             if (isGroupItem(item)) {
-              return <NavLinkGroup key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
+              return (
+                <NavLinkGroup
+                  key={ item.text }
+                  item={ item }
+                  isCollapsed={ isCollapsed }
+                />
+              );
             } else {
-              return <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>;
+              return (
+                <NavLink
+                  key={ item.text }
+                  item={ item }
+                  isCollapsed={ isCollapsed }
+                />
+              );
             }
           }) }
         </VStack>
       </Box>
       { isAuth && (
-        <Box as="nav" borderTopWidth="1px" borderColor="divider" w="100%" mt={ 3 } pt={ 3 }>
+        <Box
+          as="nav"
+          borderTopWidth="1px"
+          borderColor="divider"
+          w="100%"
+          mt={ 3 }
+          pt={ 3 }
+        >
           <VStack as="ul" spacing="1" alignItems="flex-start">
             <NavLinkRewards isCollapsed={ isCollapsed }/>
-            { accountNavItems.map((item) => <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>) }
+            { accountNavItems.map((item) => (
+              <NavLink key={ item.text } item={ item } isCollapsed={ isCollapsed }/>
+            )) }
           </VStack>
         </Box>
       ) }
@@ -114,12 +159,20 @@ const NavigationDesktop = () => {
         _hover={{ color: 'link_hovered' }}
         borderRadius="base"
         { ...chevronIconStyles }
-        transform={{ lg: isExpanded ? 'rotate(0)' : 'rotate(180deg)', xl: isCollapsed ? 'rotate(180deg)' : 'rotate(0)' }}
-        { ...getDefaultTransitionProps({ transitionProperty: 'transform, left' }) }
+        transform={{
+          lg: isExpanded ? 'rotate(0)' : 'rotate(180deg)',
+          xl: isCollapsed ? 'rotate(180deg)' : 'rotate(0)',
+        }}
+        { ...getDefaultTransitionProps({
+          transitionProperty: 'transform, left',
+        }) }
         transformOrigin="center"
         position="absolute"
         top="104px"
-        left={{ lg: isExpanded ? '216px' : '80px', xl: isCollapsed ? '80px' : '216px' }}
+        left={{
+          lg: isExpanded ? '216px' : '80px',
+          xl: isCollapsed ? '80px' : '216px',
+        }}
         cursor="pointer"
         onClick={ handleTogglerClick }
         aria-label="Expand/Collapse menu"
