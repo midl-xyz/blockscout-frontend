@@ -57,7 +57,7 @@ const HeroBanner = () => {
       w="100%"
       background={ background }
       border={ border }
-      borderRadius="md"
+      borderRadius="5px"
       p={{ base: 4, lg: 8 }}
       columnGap={ 8 }
       alignItems="center"

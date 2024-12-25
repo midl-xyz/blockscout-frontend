@@ -1,4 +1,11 @@
-import { Flex, Divider, useColorModeValue, Box } from '@chakra-ui/react';
+/* eslint-disable @next/next/no-img-element */
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
@@ -6,7 +13,7 @@ import { CONTENT_MAX_WIDTH } from 'ui/shared/layout/utils';
 
 import DeFiDropdown from './DeFiDropdown';
 import NetworkMenu from './NetworkMenu';
-import Settings from './settings/Settings';
+import SwapIcon from './SwapIcon.svg';
 import TopBarStats from './TopBarStats';
 
 const TopBar = () => {
@@ -27,11 +34,30 @@ const TopBar = () => {
           { config.features.deFiDropdown.isEnabled && (
             <>
               <DeFiDropdown/>
-              <Divider mr={ 3 } ml={{ base: 2, sm: 3 }} height={ 4 } orientation="vertical"/>
+              <Divider
+                mr={ 3 }
+                ml={{ base: 2, sm: 3 }}
+                height={ 4 }
+                orientation="vertical"
+              />
             </>
           ) }
-          <Settings/>
-          { config.UI.navigation.layout === 'horizontal' && Boolean(config.UI.navigation.featuredNetworks) && (
+
+          <Button
+            as="a"
+            size="xs"
+            sx={{ flexDirection: 'row' }}
+            href="https://midl.swap.xyz"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img src={ SwapIcon.src } alt="Swap Icon"/>
+            <p>Swap</p>
+          </Button>
+
+          { /* <Settings/> */ }
+          { config.UI.navigation.layout === 'horizontal' &&
+            Boolean(config.UI.navigation.featuredNetworks) && (
             <Box display={{ base: 'none', lg: 'flex' }}>
               <Divider mx={ 3 } height={ 4 } orientation="vertical"/>
               <NetworkMenu/>
