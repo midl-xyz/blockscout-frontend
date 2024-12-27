@@ -38,6 +38,7 @@ export type Transaction = {
   value: string;
   fee: Fee;
   gas_price: string | null;
+  btc_tx_hash: string | null | undefined;
   type: number | null;
   gas_used: string | null;
   gas_limit: string;
