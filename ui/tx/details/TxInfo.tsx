@@ -66,6 +66,7 @@ import ZkSyncL2TxnBatchHashesInfo from "ui/txnBatches/zkSyncL2/ZkSyncL2TxnBatchH
 
 import TxInfoScrollFees from "./TxInfoScrollFees";
 import { zeroAddress } from "viem";
+import IntentsDrawer from "ui/tx/TxIntents";
 
 const rollupFeature = config.features.rollup;
 
@@ -249,6 +250,13 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
             />
           </>
         )}
+      </DetailsInfoItem.Value>
+
+      <DetailsInfoItem.Label hint="Series of" isLoading={isLoading}>
+        Intents & Operations series
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value flexWrap="nowrap">
+        <IntentsDrawer data={data} isLoading={isLoading} />
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
