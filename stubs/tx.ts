@@ -2,6 +2,7 @@ import type { RawTracesResponse } from 'types/api/rawTrace';
 import type { Transaction, TransactionsStats } from 'types/api/transaction';
 
 import { ADDRESS_PARAMS } from './addressParams';
+import { zeroAddress } from 'viem';
 
 export const TX_HASH = '0x3ed9d81e7c1001bdda1caa1dc62c0acbbe3d2c671cdc20dc1e65efdaa4186967';
 
@@ -27,6 +28,8 @@ export const TX: Transaction = {
   priority_fee: null,
   base_fee_per_gas: '24',
   from: ADDRESS_PARAMS,
+  intents: [ { method: 'send', status: 'ok', hash: zeroAddress } ],
+  btc_tx_hash: 'TODO: btc_tx_hash',
   token_transfers: null,
   transaction_types: [
     'coin_transfer',

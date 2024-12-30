@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InfiniteData, QueryKey, UseInfiniteQueryResult, UseInfiniteQueryOptions } from '@tanstack/react-query';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -34,7 +35,8 @@ export default function useApiInfiniteQuery<R extends PaginatedResources>({
       return apiFetch(resourceName, { pathParams, queryParams }) as Promise<TQueryData<R>>;
     },
     initialPageParam: null,
-    getNextPageParam: (lastPage) => {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation> eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getNextPageParam: (lastPage: any) => {
       return lastPage.next_page_params as TPageParam<R>;
     },
     ...queryOptions,

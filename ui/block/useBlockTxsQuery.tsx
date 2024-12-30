@@ -4,6 +4,7 @@ import React from 'react';
 import type { Chain, GetBlockReturnType } from 'viem';
 
 import type { BlockTransactionsResponse } from 'types/api/block';
+import type { Transaction } from 'types/api/transaction';
 
 import type { ResourceError } from 'lib/api/resources';
 import { retry } from 'lib/api/useQueryClientConfig';
@@ -78,7 +79,7 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
       }
 
       return {
-        items: block.transactions
+        items: (block.transactions)
           .map((tx) => {
             if (typeof tx === 'string') {
               return;
@@ -122,9 +123,11 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
               transaction_types: [],
               transaction_tag: null,
               actions: [],
+              btc_tx_hash: undefined,
+              intents: undefined,
             };
           })
-          .filter(Boolean),
+          .filter(Boolean) as unknown as Array<Transaction>,
         next_page_params: null,
       };
     },

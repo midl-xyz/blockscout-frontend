@@ -1,4 +1,6 @@
 /* eslint-disable max-len */
+import { zeroAddress } from 'viem';
+
 import type { Transaction } from 'types/api/transaction';
 
 import * as addressMock from 'mocks/address/address';
@@ -21,6 +23,8 @@ export const base: Transaction = {
     type: 'actual',
     value: '7143168000000000',
   },
+  btc_tx_hash: 'a',
+  intents: [ { method: 'send', status: 'ok', hash: zeroAddress } ],
   from: {
     hash: '0x047A81aFB05D9B1f8844bf60fcA05DCCFbC584B9',
     implementations: null,
