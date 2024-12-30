@@ -1,12 +1,12 @@
 import type { ColorMode } from '@chakra-ui/react';
-import type { Size, ChakraStylesConfig } from 'chakra-react-select';
+import type { ChakraStylesConfig, SizeProp } from 'chakra-react-select';
 
 import type { Option } from './types';
 
 import theme from 'theme/theme';
 import getFormStyles from 'theme/utils/getFormStyles';
 
-function getValueContainerStyles(size?: Size) {
+function getValueContainerStyles(size?: SizeProp) {
   switch (size) {
     case 'sm':
     case 'md': {
@@ -25,7 +25,7 @@ function getValueContainerStyles(size?: Size) {
   }
 }
 
-function getSingleValueStyles(size?: Size) {
+function getSingleValueStyles(size?: SizeProp) {
   switch (size) {
     case 'sm':
     case 'md': {
