@@ -1,19 +1,6 @@
 name: Publish Docker image
 
 on:
-    push:
-      branches:
-        - main
-      paths-ignore:
-        - '.github/ISSUE_TEMPLATE/**'
-        - '.husky/**'
-        - '.vscode/**'
-        - 'docs/**'
-        - 'jest/**'
-        - 'mocks/**'
-        - 'playwright/**'
-        - 'stubs/**'
-        - 'tools/**'
     workflow_dispatch:
         inputs:
             tags:
@@ -37,9 +24,6 @@ jobs:
         steps:
             -   name: Set env variables
                 run: echo "TAG=$(echo ${{ github.sha }} | cut -c1-7 )" >> $GITHUB_ENV
-        
-            -   name: Show set environment variables
-                run: printf "  TAG: %s\n"  "$TAG"
         
             -   name: Add SHORT_SHA env property with commit short sha
                 run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
