@@ -36,7 +36,7 @@ jobs:
                   aws-region: ${{ secrets.AWS_REGION }}
         
             -   name: Login to AWS ECR
-                run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin public.ecr.aws/s1z6s8h0
+                run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
         
             -   name: Check out the repo
                 uses: actions/checkout@v4
@@ -51,7 +51,7 @@ jobs:
                     file: ./Dockerfile
                     push: true
                     cache-from: type=gha
-                    tags: public.ecr.aws/s1z6s8h0/midl-xyz/blockscout-frontend:${{ env.SHORT_SHA }}
+                    tags: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/midl-xyz/blockscout-frontend:${{ env.SHORT_SHA }}
                     platforms: ${{ inputs.platforms }}
                     labels: ${{ steps.meta.outputs.labels }}
                     build-args: |
