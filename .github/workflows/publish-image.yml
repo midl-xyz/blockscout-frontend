@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Publish Docker image 
 
 on:
     workflow_dispatch:
@@ -15,18 +15,18 @@ on:
                 description: Image platforms (you can specify multiple platforms separated by comma)
                 required: false
                 type: string
-                default: linux/amd64,linux/arm64
+                default: linux/arm64
 
 jobs:
-    run:
-        name: Run
+    publish-docker-image:
+        name: Publish Docker image
         runs-on: ubuntu-latest
         steps:
             -   name: Set env variables
                 run: echo "TAG=$(echo ${{ github.sha }} | cut -c1-7 )" >> $GITHUB_ENV
         
             -   name: Add SHORT_SHA env property with commit short sha
-                run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+                run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-7`" >> $GITHUB_ENV
         
             -   name: Configure AWS credentials
                 uses: aws-actions/configure-aws-credentials@v2
@@ -58,4 +58,5 @@ jobs:
                         GIT_COMMIT_SHA=${{ env.SHORT_SHA }}
                         GIT_TAG=${{ github.ref_type == 'tag' && github.ref_name || '' }}
                         ${{ inputs.build_args }}
-              
+
+    
