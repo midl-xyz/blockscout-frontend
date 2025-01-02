@@ -25,7 +25,7 @@ jobs:
                     cd ~/blockscout-frontend
                     git pull origin main --rebase
                     
-                    SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7 )
+                    export SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7 )
                     docker build . -t blockscout-midl:frontend-${SHORT_SHA} --no-cache
                     
                     cd ~/infra/regtest/blockscout
