@@ -30,7 +30,8 @@ jobs:
                     
                     cd ~/infra/regtest/blockscout
                     yq -i '.services.blockscout-frontend.image = "blockscout-midl:frontend-" + env(SHORT_SHA)' docker-compose.yaml
-        
+
+                    sleep 5
                     docker compose up -d --force-recreate blockscout-frontend
                     
                     git add docker-compose.yaml
