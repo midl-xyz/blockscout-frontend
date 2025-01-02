@@ -29,7 +29,7 @@ jobs:
                     docker build . -t blockscout-midl:frontend-${SHORT_SHA} --no-cache
                     
                     cd ~/infra/regtest/blockscout
-                    yq -i '.services.blockscout-frontend.image = "blockscout-midl:frontend-"${SHORT_SHA}"'"' docker-compose.yaml
+                    yq -i '.services.blockscout-frontend.image = "blockscout-midl:frontend-" + env(SHORT_SHA)' docker-compose.yaml
         
                     docker compose up -d --force-recreate blockscout-frontend
                     
