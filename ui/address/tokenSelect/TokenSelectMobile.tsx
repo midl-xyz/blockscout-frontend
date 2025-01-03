@@ -10,9 +10,10 @@ import useTokenSelect from './useTokenSelect';
 interface Props {
   data: FormattedData;
   isLoading: boolean;
+  btcAddress?: string;
 }
 
-const TokenSelectMobile = ({ data, isLoading }: Props) => {
+const TokenSelectMobile = ({ data, isLoading, btcAddress }: Props) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
   const result = useTokenSelect(data);
 
@@ -22,7 +23,7 @@ const TokenSelectMobile = ({ data, isLoading }: Props) => {
       <Modal isOpen={ isOpen } onClose={ onClose } size="full">
         <ModalContent>
           <ModalCloseButton/>
-          <TokenSelectMenu { ...result }/>
+          <TokenSelectMenu btcAddress={ btcAddress } { ...result }/>
         </ModalContent>
       </Modal>
     </>

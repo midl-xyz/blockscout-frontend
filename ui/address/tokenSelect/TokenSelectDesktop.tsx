@@ -12,9 +12,10 @@ import useTokenSelect from './useTokenSelect';
 interface Props {
   data: FormattedData;
   isLoading: boolean;
+  btcAddress?: string;
 }
 
-const TokenSelectDesktop = ({ data, isLoading }: Props) => {
+const TokenSelectDesktop = ({ data, isLoading, btcAddress }: Props) => {
   const { isOpen, onToggle, onClose } = useDisclosure();
 
   const result = useTokenSelect(data);
@@ -26,7 +27,7 @@ const TokenSelectDesktop = ({ data, isLoading }: Props) => {
       </PopoverTrigger>
       <PopoverContent w="355px" maxH="450px" overflowY="scroll">
         <PopoverBody px={ 4 } py={ 6 } boxShadow="2xl" >
-          <TokenSelectMenu { ...result }/>
+          <TokenSelectMenu btcAddress={ btcAddress } { ...result }/>
         </PopoverBody>
       </PopoverContent>
     </Popover>

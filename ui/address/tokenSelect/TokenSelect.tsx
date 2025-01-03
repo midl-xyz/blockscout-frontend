@@ -19,9 +19,10 @@ import TokenSelectMobile from './TokenSelectMobile';
 
 interface Props {
   onClick?: () => void;
+  btcAddress?: string;
 }
 
-const TokenSelect = ({ onClick }: Props) => {
+const TokenSelect = ({ onClick, btcAddress }: Props) => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const queryClient = useQueryClient();
@@ -57,8 +58,8 @@ const TokenSelect = ({ onClick }: Props) => {
   return (
     <Flex columnGap={ 3 } mt={{ base: 1, lg: 0 }}>
       { isMobile ?
-        <TokenSelectMobile data={ data } isLoading={ tokensIsFetching === 1 }/> :
-        <TokenSelectDesktop data={ data } isLoading={ tokensIsFetching === 1 }/>
+        <TokenSelectMobile btcAddress={ btcAddress } data={ data } isLoading={ tokensIsFetching === 1 }/> :
+        <TokenSelectDesktop btcAddress={ btcAddress } data={ data } isLoading={ tokensIsFetching === 1 }/>
       }
       <Tooltip label="Show all tokens">
         <Box>

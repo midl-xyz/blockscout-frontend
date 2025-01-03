@@ -32,9 +32,10 @@ import type { AddressQuery } from './utils/useAddressQuery';
 interface Props {
   addressQuery: AddressQuery;
   scrollRef?: React.RefObject<HTMLDivElement>;
+  btcAddress?: string;
 }
 
-const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
+const AddressDetails = ({ addressQuery, scrollRef, btcAddress }: Props) => {
   const router = useRouter();
 
   const addressHash = getQueryParamString(router.query.hash);
@@ -183,7 +184,7 @@ const AddressDetails = ({ addressQuery, scrollRef }: Props) => {
               Tokens
             </DetailsInfoItem.Label>
             <DetailsInfoItem.Value py={ addressQuery.data ? 0 : undefined }>
-              { addressQuery.data ? <TokenSelect onClick={ handleCounterItemClick }/> : <Box>0</Box> }
+              { addressQuery.data ? <TokenSelect btcAddress={ btcAddress } onClick={ handleCounterItemClick }/> : <Box>0</Box> }
             </DetailsInfoItem.Value>
           </>
         ) }
