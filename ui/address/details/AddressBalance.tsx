@@ -1,10 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import type { SocketMessage } from 'lib/socket/types';
 import type { Address } from 'types/api/address';
 
-import config from 'configs/app';
 import { getResourceKey } from 'lib/api/useApiQuery';
 import useSocketChannel from 'lib/socket/useSocketChannel';
 import useSocketMessage from 'lib/socket/useSocketMessage';
@@ -16,9 +15,10 @@ import NativeTokenIcon from 'ui/shared/NativeTokenIcon';
 interface Props {
   data: Pick<Address, 'block_number_balance_updated_at' | 'coin_balance' | 'hash' | 'exchange_rate'>;
   isLoading: boolean;
+  btcAddress?: string;
 }
 
-const AddressBalance = ({ data, isLoading }: Props) => {
+const AddressBalance = ({ data, isLoading, btcAddress }: Props) => {
   const [ lastBlockNumber, setLastBlockNumber ] = React.useState<number>(data.block_number_balance_updated_at || 0);
   const queryClient = useQueryClient();
 
@@ -65,10 +65,41 @@ const AddressBalance = ({ data, isLoading }: Props) => {
     handler: handleNewCoinBalanceMessage,
   });
 
+  const [ btcBalance, setBtcBalance ] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBtcBalance = async() => {
+      if (btcAddress) {
+        try {
+          const response = await fetch(
+            `https://regtest-mempool.midl.xyz/api/address/${ btcAddress }`,
+          );
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data: any = await response.json();
+
+          const balanceInBtc =
+            (data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum);
+          setBtcBalance(`${ balanceInBtc.toFixed(8) }`);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to fetch BTC balance:', error);
+          setBtcBalance('Error fetching balance');
+        }
+      }
+    };
+
+    fetchBtcBalance();
+  }, [ btcAddress ]);
+
+  if (btcBalance) {
+    data.coin_balance = btcBalance;
+  }
+
   return (
     <>
       <DetailsInfoItem.Label
-        hint={ `${ currencyUnits.ether } balance` }
+        hint={ `${ currencyUnits.ether } balance on BTC network` }
         isLoading={ isLoading }
       >
         Balance
@@ -78,7 +109,7 @@ const AddressBalance = ({ data, isLoading }: Props) => {
         <CurrencyValue
           value={ data.coin_balance || '0' }
           exchangeRate={ data.exchange_rate }
-          decimals={ String(config.chain.currency.decimals) }
+          decimals={ 8 }
           currency={ currencyUnits.ether }
           accuracyUsd={ 2 }
           accuracy={ 8 }

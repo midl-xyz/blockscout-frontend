@@ -174,7 +174,7 @@ const AddressDetails = ({ addressQuery, scrollRef, btcAddress }: Props) => {
           />
         ) }
 
-        <AddressBalance data={ data } isLoading={ addressQuery.isPlaceholderData }/>
+        <AddressBalance btcAddress={ btcAddress } data={ data } isLoading={ addressQuery.isPlaceholderData }/>
 
         { data.has_tokens && (
           <>

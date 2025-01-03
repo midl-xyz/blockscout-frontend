@@ -47,7 +47,7 @@ class MyDocument extends Document {
           <script src="/assets/envs.js"/>
 
           { /* FAVICON */ }
-          <link rel="icon" sizes="any" type="image/png" href="favicon/favicon.png"/>
+          <link rel="icon" sizes="any" type="image/png" href="/favicon/favicon.png"/>
         </Head>
         <body>
           <ColorModeScript initialColorMode={ theme.config.initialColorMode }/>
