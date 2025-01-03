@@ -47,12 +47,7 @@ class MyDocument extends Document {
           <script src="/assets/envs.js"/>
 
           { /* FAVICON */ }
-          <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon.png"/>
-          <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon.png"/>
-          <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon/favicon.png"/>
-          <link rel="shortcut icon" href="/assets/favicon/favicon.png"/>
-          <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/favicon.png"/>
-          <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/favicon.png"/>
+          <link rel="icon" href="/assets/favicon/favicon.png"/>
         </Head>
         <body>
           <ColorModeScript initialColorMode={ theme.config.initialColorMode }/>
