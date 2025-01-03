@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import {
   Box,
   Button,
@@ -9,11 +8,11 @@ import {
 import React from 'react';
 
 import config from 'configs/app';
+import IconSvg from 'ui/shared/IconSvg';
 import { CONTENT_MAX_WIDTH } from 'ui/shared/layout/utils';
 
 import DeFiDropdown from './DeFiDropdown';
 import NetworkMenu from './NetworkMenu';
-import SwapIcon from './SwapIcon.svg';
 import TopBarStats from './TopBarStats';
 
 const TopBar = () => {
@@ -51,7 +50,13 @@ const TopBar = () => {
             rel="noopener noreferrer"
             target="_blank"
           >
-            <img src={ SwapIcon.src } alt="Swap Icon"/>
+            <IconSvg
+              name="swap"
+              height="3"
+              width="3"
+              color="white"
+              mr="4px"
+            />
             <p>Swap</p>
           </Button>
 

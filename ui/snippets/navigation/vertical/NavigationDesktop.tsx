@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Flex, Box, VStack, useColorModeValue, HStack } from '@chakra-ui/react';
 import React from 'react';
 
@@ -105,11 +106,14 @@ const NavigationDesktop = () => {
             <NetworkMenu isCollapsed={ isCollapsed }/>
           ) }
         </Box>
-        <img
-          src={ MenuIcon.src }
-          alt="Menu icon"
-          style={{ width: '36px', height: '36px' }}
-        />
+        { !isCollapsed && (
+          <img
+            src={ MenuIcon.src }
+            alt="Menu icon"
+            style={{ width: '36px', height: '36px' }}
+          />
+        ) }
+
       </HStack>
       <Box as="nav" mt={ 6 } w="100%">
         <VStack as="ul" spacing="1" alignItems="flex-start">
