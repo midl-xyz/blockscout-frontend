@@ -61,14 +61,17 @@ export const transformRuneData = (
     typeof input === 'string' ? JSON.parse(input) : input;
 
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  const groupedTransactions = inputData.results.reduce((acc: any, result: any) => {
-    const key = `${ result.location.tx_id }-${ result.location.block_hash }`;
-    if (!acc[key]) {
-      acc[key] = [];
-    }
-    acc[key].push(result);
-    return acc;
-  }, {} as Record<string, InputData['results']>);
+  const groupedTransactions = inputData.results.reduce(
+    (acc: any, result: any) => {
+      const key = `${ result.location.tx_id }-${ result.location.block_hash }`;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(result);
+      return acc;
+    },
+    {} as Record<string, InputData['results']>,
+  );
 
   const allTransactions: Array<RuneTransaction & { timeAgo: string }> = [];
 
@@ -110,7 +113,7 @@ export const transformRuneData = (
   return allTransactions;
 };
 
-export const useRunesTransactions = (btcAddress: string | undefined) => {
+export const useRunesTransactions = (btcAddress: string | undefined | null) => {
   const [ transactions, setTransactions ] = useState<Array<RuneTransaction>>([]);
   const [ error, setError ] = useState<string | null>(null);
   const [ isLoading, setIsLoading ] = useState<boolean>(false);
@@ -150,7 +153,7 @@ export const useRunesTransactions = (btcAddress: string | undefined) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     fetchBtcTransactions();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ btcAddress ]);
 
   return { transactions, error, isLoading };

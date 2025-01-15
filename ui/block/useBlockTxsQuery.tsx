@@ -34,19 +34,29 @@ interface Params {
   tab: string;
 }
 
-export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Params): BlockTxsQuery {
+export default function useBlockTxsQuery({
+  heightOrHash,
+  blockQuery,
+  tab,
+}: Params): BlockTxsQuery {
   const [ isRefetchEnabled, setRefetchEnabled ] = React.useState(false);
 
   const apiQuery = useQueryWithPages({
     resourceName: 'block_txs',
     pathParams: { height_or_hash: heightOrHash },
     options: {
-      enabled: Boolean(tab === 'txs' && !blockQuery.isPlaceholderData && !blockQuery.isDegradedData),
-      placeholderData: generateListStub<'block_txs'>(TX, 50, { next_page_params: {
-        block_number: 9004925,
-        index: 49,
-        items_count: 50,
-      } }),
+      enabled: Boolean(
+        tab === 'txs' &&
+          !blockQuery.isPlaceholderData &&
+          !blockQuery.isDegradedData,
+      ),
+      placeholderData: generateListStub<'block_txs'>(TX, 50, {
+        next_page_params: {
+          block_number: 9004925,
+          index: 49,
+          items_count: 50,
+        },
+      }),
       refetchOnMount: false,
       retry: (failureCount, error) => {
         if (isRefetchEnabled) {
@@ -61,7 +71,11 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
     },
   });
 
-  const rpcQuery = useQuery<RpcResponseType, unknown, BlockTransactionsResponse | null>({
+  const rpcQuery = useQuery<
+    RpcResponseType,
+    unknown,
+    BlockTransactionsResponse | null
+  >({
     queryKey: [ 'RPC', 'block_txs', { heightOrHash } ],
     queryFn: async() => {
       if (!publicClient) {
@@ -69,7 +83,10 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
       }
 
       const blockParams = heightOrHash.startsWith('0x') ?
-        { blockHash: heightOrHash as `0x${ string }`, includeTransactions: true } :
+        {
+          blockHash: heightOrHash as `0x${ string }`,
+          includeTransactions: true,
+        } :
         { blockNumber: BigInt(heightOrHash), includeTransactions: true };
       return publicClient.getBlock(blockParams).catch(() => null);
     },
@@ -79,7 +96,7 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
       }
 
       return {
-        items: (block.transactions)
+        items: block.transactions
           .map((tx) => {
             if (typeof tx === 'string') {
               return;
@@ -89,7 +106,9 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
               from: { ...unknownAddress, hash: tx.from as string },
               to: tx.to ? { ...unknownAddress, hash: tx.to as string } : null,
               hash: tx.hash as string,
-              timestamp: block?.timestamp ? dayjs.unix(Number(block.timestamp)).format() : null,
+              timestamp: block?.timestamp ?
+                dayjs.unix(Number(block.timestamp)).format() :
+                null,
               confirmation_duration: null,
               status: undefined,
               block_number: Number(block.number),
@@ -97,7 +116,8 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
               gas_price: tx.gasPrice?.toString() ?? null,
               base_fee_per_gas: block?.baseFeePerGas?.toString() ?? null,
               max_fee_per_gas: tx.maxFeePerGas?.toString() ?? null,
-              max_priority_fee_per_gas: tx.maxPriorityFeePerGas?.toString() ?? null,
+              max_priority_fee_per_gas:
+                tx.maxPriorityFeePerGas?.toString() ?? null,
               nonce: tx.nonce,
               position: tx.transactionIndex,
               type: tx.typeHex ? hexToDecimal(tx.typeHex) : null,
@@ -123,7 +143,11 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
               transaction_types: [],
               transaction_tag: null,
               actions: [],
-              btc_tx_hash: undefined,
+              btc_dapp_tx: undefined,
+              completion_tx: undefined,
+              initiation_tx: undefined,
+              btc_address: undefined,
+              btc_result_tx: undefined,
               intents: undefined,
             };
           })
@@ -132,7 +156,12 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
       };
     },
     placeholderData: GET_BLOCK_WITH_TRANSACTIONS,
-    enabled: publicClient !== undefined && tab === 'txs' && (blockQuery.isDegradedData || apiQuery.isError || apiQuery.errorUpdateCount > 0),
+    enabled:
+      publicClient !== undefined &&
+      tab === 'txs' &&
+      (blockQuery.isDegradedData ||
+        apiQuery.isError ||
+        apiQuery.errorUpdateCount > 0),
     retry: false,
     refetchOnMount: false,
   });
@@ -155,13 +184,16 @@ export default function useBlockTxsQuery({ heightOrHash, blockQuery, tab }: Para
     }
   }, [ rpcQuery.data, rpcQuery.isPlaceholderData ]);
 
-  const isRpcQuery = Boolean((
-    blockQuery.isDegradedData ||
-    ((apiQuery.isError || apiQuery.isPlaceholderData) && apiQuery.errorUpdateCount > 0)
-  ) && rpcQuery.data && publicClient);
+  const isRpcQuery = Boolean(
+    (blockQuery.isDegradedData ||
+      ((apiQuery.isError || apiQuery.isPlaceholderData) &&
+        apiQuery.errorUpdateCount > 0)) &&
+      rpcQuery.data &&
+      publicClient,
+  );
 
   const rpcQueryWithPages: QueryWithPagesResult<'block_txs'> = {
-    ...rpcQuery as UseQueryResult<BlockTransactionsResponse, ResourceError>,
+    ...(rpcQuery as UseQueryResult<BlockTransactionsResponse, ResourceError>),
     pagination: emptyPagination,
     onFilterChange: () => {},
     onSortingChange: () => {},

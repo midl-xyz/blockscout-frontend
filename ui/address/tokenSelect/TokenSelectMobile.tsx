@@ -10,7 +10,7 @@ import useTokenSelect from './useTokenSelect';
 interface Props {
   data: FormattedData;
   isLoading: boolean;
-  btcAddress?: string;
+  btcAddress?: string | null;
 }
 
 const TokenSelectMobile = ({ data, isLoading, btcAddress }: Props) => {

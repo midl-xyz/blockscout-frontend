@@ -1,10 +1,20 @@
 import type { Transaction } from 'types/api/transaction';
 
-import type { UserTags, AddressImplementation, AddressParam, AddressFilecoinParams } from './addressParams';
+import type {
+  UserTags,
+  AddressImplementation,
+  AddressParam,
+  AddressFilecoinParams,
+} from './addressParams';
 import type { Block, EpochRewardsType } from './block';
 import type { InternalTransaction } from './internalTransaction';
 import type { MudWorldSchema, MudWorldTable } from './mudWorlds';
-import type { NFTTokenType, TokenInfo, TokenInstance, TokenType } from './token';
+import type {
+  NFTTokenType,
+  TokenInfo,
+  TokenInstance,
+  TokenType,
+} from './token';
 import type { TokenTransfer, TokenTransferPagination } from './tokenTransfer';
 
 export interface Address extends UserTags {
@@ -15,6 +25,7 @@ export interface Address extends UserTags {
   creation_transaction_hash: string | null;
   exchange_rate: string | null;
   ens_domain_name: string | null;
+  btc_address: string | null | undefined;
   filecoin?: AddressFilecoinParams;
   zilliqa?: AddressZilliqaParams;
   // TODO: if we are happy with tabs-counters method, should we delete has_something fields?
@@ -108,7 +119,9 @@ export interface AddressTransactionsResponse {
 
 export const AddressFromToFilterValues = [ 'from', 'to' ] as const;
 
-export type AddressFromToFilter = typeof AddressFromToFilterValues[number] | undefined;
+export type AddressFromToFilter =
+  | (typeof AddressFromToFilterValues)[number]
+  | undefined;
 
 export type AddressTxsFilters = {
   filter: AddressFromToFilter;

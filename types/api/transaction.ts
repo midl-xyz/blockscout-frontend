@@ -11,12 +11,26 @@ import type { TokenTransfer } from './tokenTransfer';
 import type { TxAction } from './txAction';
 import type { ZkSyncBatchesItem } from './zkSyncL2';
 
-export type TransactionRevertReason = {
-  raw: string;
-} | DecodedInput;
+export type TransactionRevertReason =
+  | {
+    raw: string;
+  }
+  | DecodedInput;
 
-type WrappedTransactionFields = 'decoded_input' | 'fee' | 'gas_limit' | 'gas_price' | 'hash' | 'max_fee_per_gas' |
-'max_priority_fee_per_gas' | 'method' | 'nonce' | 'raw_input' | 'to' | 'type' | 'value';
+type WrappedTransactionFields =
+  | 'decoded_input'
+  | 'fee'
+  | 'gas_limit'
+  | 'gas_price'
+  | 'hash'
+  | 'max_fee_per_gas'
+  | 'max_priority_fee_per_gas'
+  | 'method'
+  | 'nonce'
+  | 'raw_input'
+  | 'to'
+  | 'type'
+  | 'value';
 
 export interface OpWithdrawal {
   l1_transaction_hash: string;
@@ -38,7 +52,11 @@ export type Transaction = {
   value: string;
   fee: Fee;
   gas_price: string | null;
-  btc_tx_hash: string | null | undefined;
+  btc_dapp_tx: string | null | undefined;
+  completion_tx: string | null | undefined;
+  initiation_tx: string | null | undefined;
+  btc_address: string | null | undefined;
+  btc_result_tx: string | null | undefined;
   type: number | null;
   gas_used: string | null;
   gas_limit: string;
@@ -64,8 +82,14 @@ export type Transaction = {
   l1_gas_price?: string;
   l1_gas_used?: string;
   has_error_in_internal_transactions: boolean | null;
-  intents: Array<{ method: string | undefined; hash: string | undefined; status: 'ok' | 'error' | null | undefined;
-  }> | undefined | null;
+  intents:
+    | Array<{
+      method: string | undefined;
+      hash: string | undefined;
+      status: 'ok' | 'error' | null | undefined;
+    }>
+    | undefined
+    | null;
   // optimism fields
   op_withdrawals?: Array<OpWithdrawal>;
   // SUAVE fields
@@ -88,10 +112,13 @@ export type Transaction = {
   // zkEvm fields
   zkevm_verify_hash?: string;
   zkevm_batch_number?: number;
-  zkevm_status?: typeof ZKEVM_L2_TX_STATUSES[number];
+  zkevm_status?: (typeof ZKEVM_L2_TX_STATUSES)[number];
   zkevm_sequence_hash?: string;
   // zkSync FIELDS
-  zksync?: Omit<ZkSyncBatchesItem, 'number' | 'transaction_count' | 'timestamp'> & {
+  zksync?: Omit<
+    ZkSyncBatchesItem,
+    'number' | 'transaction_count' | 'timestamp'
+  > & {
     batch_number: number | null;
   };
   // Zilliqa fields
@@ -126,7 +153,12 @@ type ArbitrumTransactionData = {
   };
 };
 
-export type ArbitrumMessageStatus = 'Relayed' | 'Syncing with base layer' | 'Waiting for confirmation' | 'Ready for relay' | 'Settlement pending';
+export type ArbitrumMessageStatus =
+  | 'Relayed'
+  | 'Syncing with base layer'
+  | 'Waiting for confirmation'
+  | 'Ready for relay'
+  | 'Settlement pending';
 
 export const ZKEVM_L2_TX_STATUSES = [ 'Confirmed by Sequencer', 'L1 Confirmed' ];
 
@@ -137,7 +169,9 @@ export interface TransactionsStats {
   transactions_count_24h: string;
 }
 
-export type TransactionsResponse = TransactionsResponseValidated | TransactionsResponsePending;
+export type TransactionsResponse =
+  | TransactionsResponseValidated
+  | TransactionsResponsePending;
 
 export interface TransactionsResponseValidated {
   items: Array<Transaction>;
@@ -176,16 +210,20 @@ export interface TransactionsResponseWatchlist {
   } | null;
 }
 
-export type TransactionType = 'rootstock_remasc' |
-'rootstock_bridge' |
-'token_transfer' |
-'contract_creation' |
-'contract_call' |
-'token_creation' |
-'coin_transfer' |
-'blob_transaction';
+export type TransactionType =
+  | 'rootstock_remasc'
+  | 'rootstock_bridge'
+  | 'token_transfer'
+  | 'contract_creation'
+  | 'contract_call'
+  | 'token_creation'
+  | 'coin_transfer'
+  | 'blob_transaction';
 
-export type TxsResponse = TransactionsResponseValidated | TransactionsResponsePending | BlockTransactionsResponse;
+export type TxsResponse =
+  | TransactionsResponseValidated
+  | TransactionsResponsePending
+  | BlockTransactionsResponse;
 
 export interface TransactionsSorting {
   sort: 'value' | 'fee' | 'block_number';
@@ -194,7 +232,8 @@ export interface TransactionsSorting {
 
 export type TransactionsSortingField = TransactionsSorting['sort'];
 
-export type TransactionsSortingValue = `${ TransactionsSortingField }-${ TransactionsSorting['order'] }`;
+export type TransactionsSortingValue =
+  `${ TransactionsSortingField }-${ TransactionsSorting['order'] }`;
 
 export type ScrollTransactionData = {
   l1_fee: string;

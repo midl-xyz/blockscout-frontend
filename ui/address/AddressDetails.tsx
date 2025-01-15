@@ -32,7 +32,7 @@ import type { AddressQuery } from './utils/useAddressQuery';
 interface Props {
   addressQuery: AddressQuery;
   scrollRef?: React.RefObject<HTMLDivElement>;
-  btcAddress?: string;
+  btcAddress?: string | null;
 }
 
 const AddressDetails = ({ addressQuery, scrollRef, btcAddress }: Props) => {

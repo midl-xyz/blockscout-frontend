@@ -11,20 +11,21 @@ import {
   Thead,
   Tr,
   VStack,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
-import useIsMounted from "lib/hooks/useIsMounted";
-import getQueryParamString from "lib/router/getQueryParamString";
-import { useRunesTransactions } from "ui/address/runes-utils";
-import AddressIdenticon from "ui/shared/entities/address/AddressIdenticon";
-import LinkExternal from "ui/shared/links/LinkExternal";
-import Arrow from "./assets/SVG.png";
+import useIsMounted from 'lib/hooks/useIsMounted';
+import getQueryParamString from 'lib/router/getQueryParamString';
+import { useRunesTransactions } from 'ui/address/runes-utils';
+import AddressIdenticon from 'ui/shared/entities/address/AddressIdenticon';
+import LinkExternal from 'ui/shared/links/LinkExternal';
 
-const slicedHash = (hash: string) => hash.slice(0, 6) + "..." + hash.slice(-6);
+import Arrow from './assets/SVG.png';
+
+const slicedHash = (hash: string) => hash.slice(0, 6) + '...' + hash.slice(-6);
 
 type Props = {
-  btcAddress: string;
+  btcAddress: string | null | undefined;
   shouldRender: boolean;
 };
 
@@ -36,16 +37,13 @@ const AddressRunesTransfers = ({ btcAddress, shouldRender }: Props) => {
 
   const {
     transactions: data,
-    isLoading,
-    error,
-  } = useRunesTransactions(
-    "bcrt1puwn2akldaf2hqv64kmkjt3lgutk4se8rlmr8rcpk2v0ygg6zqqtqzzjdq9"
-  );
+  } = useRunesTransactions(btcAddress);
+
   if (!isMounted || !shouldRender || data.length === 0) {
     return null;
   }
   return (
-    <Hide below="lg" ssr={false}>
+    <Hide below="lg" ssr={ false }>
       <Table minW="950px" width="100%">
         <Thead>
           <Tr>
@@ -60,27 +58,27 @@ const AddressRunesTransfers = ({ btcAddress, shouldRender }: Props) => {
           </Tr>
         </Thead>
         <Tbody>
-          {data.map((item, index) => (
-            <Tr key={index}>
+          { data.map((item, index) => (
+            <Tr key={ index }>
               <Td width="44px"></Td>
               <Td width="230px">
-                <VStack sx={{ gap: 2, alignItems: "start" }}>
+                <VStack sx={{ gap: 2, alignItems: 'start' }}>
                   <HStack sx={{ gap: 2 }}>
                     <Text
                       background="gray.200"
                       color="gray.400"
                       borderRadius="400px"
-                      fontWeight={600}
+                      fontWeight={ 600 }
                       width="20px"
                       height="20px"
                       textAlign="center"
                     >
                       T
                     </Text>
-                    <Text fontSize="sm" fontWeight={500}>
-                      {item.spacedRuneName.length > 28
-                        ? item.spacedRuneName.slice(0, 28) + "..."
-                        : item.spacedRuneName}
+                    <Text fontSize="sm" fontWeight={ 500 }>
+                      { item.spacedRuneName.length > 28 ?
+                        item.spacedRuneName.slice(0, 28) + '...' :
+                        item.spacedRuneName }
                     </Text>
                   </HStack>
 
@@ -90,7 +88,7 @@ const AddressRunesTransfers = ({ btcAddress, shouldRender }: Props) => {
                       color="blackAlpha.800"
                       borderRadius="4px"
                       fontSize="sm"
-                      fontWeight={500}
+                      fontWeight={ 500 }
                       padding="2px"
                     >
                       Runes
@@ -101,7 +99,7 @@ const AddressRunesTransfers = ({ btcAddress, shouldRender }: Props) => {
                       color="orange.500"
                       borderRadius="4px"
                       fontSize="sm"
-                      fontWeight={500}
+                      fontWeight={ 500 }
                       padding="2px"
                     >
                       Edict
@@ -112,86 +110,86 @@ const AddressRunesTransfers = ({ btcAddress, shouldRender }: Props) => {
 
               <Td width="200px">
                 <LinkExternal
-                  href={`https://mempool.regtest.midl.xyz/tx/${item.txHash}`}
+                  href={ `https://mempool.regtest.midl.xyz/tx/${ item.txHash }` }
                 >
-                  {slicedHash(item.txHash)}
+                  { slicedHash(item.txHash) }
                 </LinkExternal>
               </Td>
               <Td width="140px">
-                <VStack sx={{ gap: 1, alignItems: "start" }}>
+                <VStack sx={{ gap: 1, alignItems: 'start' }}>
                   <LinkExternal
-                    href={`https://mempool.regtest.midl.xyz/block/${item.blockNumber}`}
+                    href={ `https://mempool.regtest.midl.xyz/block/${ item.blockNumber }` }
                   >
-                    {item.blockNumber}
+                    { item.blockNumber }
                   </LinkExternal>
 
-                  <Text fontSize="sm" fontWeight={500} color="gray.500">
-                    {item.timeAgo}
+                  <Text fontSize="sm" fontWeight={ 500 } color="gray.500">
+                    { item.timeAgo }
                   </Text>
                 </VStack>
               </Td>
-              <Td colSpan={2}>
+              <Td colSpan={ 2 }>
                 <HStack
                   justifyContent="space-between"
                   sx={{
-                    width: "100%!important",
+                    width: '100%!important',
                     padding: 0,
                   }}
                 >
                   <HStack width="60%" sx={{ padding: 0 }}>
-                    <AddressIdenticon hash={currentAddress} size={20} />
+                    <AddressIdenticon hash={ currentAddress } size={ 20 }/>
                     <LinkExternal
                       href={
-                        item.addressFrom === "MIDL TSS Vault"
-                          ? "https://mempool.regtest.midl.xyz/address/bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j"
-                          : `https://mempool.regtest.midl.xyz/address/${item.addressFrom}`
+                        item.addressFrom === 'MIDL TSS Vault' ?
+                          'https://mempool.regtest.midl.xyz/address/bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j' :
+                          `https://mempool.regtest.midl.xyz/address/${ item.addressFrom }`
                       }
                     >
-                      {item.addressFrom ===
-                        "bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j" ||
-                      item.addressFrom === "MIDL TSS Vault"
-                        ? "MIDL TSS Vault"
-                        : slicedHash(item.addressFrom)}
+                      { item.addressFrom ===
+                        'bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j' ||
+                      item.addressFrom === 'MIDL TSS Vault' ?
+                        'MIDL TSS Vault' :
+                        slicedHash(item.addressFrom) }
                     </LinkExternal>
 
-                    <Box sx={{ width: "20px", height: "20px" }}>
+                    <Box sx={{ width: '20px', height: '20px' }}>
                       <img
-                        src={Arrow.src}
-                        style={{ width: "100%", height: "100%" }}
+                        src={ Arrow.src }
+                        style={{ width: '100%', height: '100%' }}
                         alt="Pointer icon"
                       />
                     </Box>
 
                     <LinkExternal
                       href={
-                        item.addressTo === "MIDL TSS Vault"
-                          ? "https://mempool.regtest.midl.xyz/address/bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j"
-                          : `https://mempool.regtest.midl.xyz/address/${item.addressTo}`
+                        item.addressTo === 'MIDL TSS Vault' ?
+                          'https://mempool.regtest.midl.xyz/address/bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j' :
+                          `https://mempool.regtest.midl.xyz/address/${ item.addressTo }`
                       }
                     >
-                      {item.addressTo ===
-                        "bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j" ||
-                      item.addressTo === "MIDL TSS Vault"
-                        ? "MIDL TSS Vault"
-                        : slicedHash(item.addressTo)}
+                      { item.addressTo ===
+                        'bcrt1qsjcsryftgwyh3e0z0mvc6vdjx9pl8cx8006q3j' ||
+                      item.addressTo === 'MIDL TSS Vault' ?
+                        'MIDL TSS Vault' :
+                        slicedHash(item.addressTo) }
                     </LinkExternal>
                   </HStack>
                   <HStack
                     width="40%"
                     sx={{
                       padding: 0,
-                      alignItems: "end",
-                      justifyContent: "end",
+                      alignItems: 'end',
+                      justifyContent: 'end',
                     }}
                   >
-                    <Text variant="secondary" fontSize="sm" fontWeight={500}>
-                      {item.amountOfRunes}
+                    <Text variant="secondary" fontSize="sm" fontWeight={ 500 }>
+                      { item.amountOfRunes }
                     </Text>
                   </HStack>
                 </HStack>
               </Td>
             </Tr>
-          ))}
+          )) }
         </Tbody>
       </Table>
     </Hide>

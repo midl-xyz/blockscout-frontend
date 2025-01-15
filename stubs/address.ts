@@ -21,6 +21,7 @@ export const ADDRESS_INFO: Address = {
   coin_balance: '810941268802273085757',
   creation_transaction_hash: null,
   creator_address_hash: ADDRESS_HASH,
+  btc_address: null,
   exchange_rate: null,
   has_decompiled_code: false,
   has_logs: true,

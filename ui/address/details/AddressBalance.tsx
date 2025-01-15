@@ -15,7 +15,7 @@ import NativeTokenIcon from 'ui/shared/NativeTokenIcon';
 interface Props {
   data: Pick<Address, 'block_number_balance_updated_at' | 'coin_balance' | 'hash' | 'exchange_rate'>;
   isLoading: boolean;
-  btcAddress?: string;
+  btcAddress?: string | null;
 }
 
 const AddressBalance = ({ data, isLoading, btcAddress }: Props) => {

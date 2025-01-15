@@ -144,11 +144,39 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         </Tooltip>
       ) : null;
 
-  const btcTxHash =
-    data.btc_tx_hash &&
-    data.btc_tx_hash !==
+  const btcDappTxHash =
+    data.btc_dapp_tx &&
+    data.btc_dapp_tx !==
       '0x0000000000000000000000000000000000000000000000000000000000000000' ?
-      data.btc_tx_hash :
+      data.btc_dapp_tx :
+      null;
+
+  const completionTx =
+    data.completion_tx &&
+    data.completion_tx !==
+      '0x0000000000000000000000000000000000000000000000000000000000000000' ?
+      data.completion_tx :
+      null;
+
+  const btcResultTx =
+    data.btc_result_tx &&
+    data.btc_result_tx !==
+      '0x0000000000000000000000000000000000000000000000000000000000000000' ?
+      data.btc_result_tx :
+      null;
+
+  const btcAddress =
+    data.btc_address &&
+    data.btc_address !==
+      '0x0000000000000000000000000000000000000000000000000000000000000000' ?
+      data.btc_address :
+      null;
+
+  const initiationTx =
+    data.initiation_tx &&
+    data.initiation_tx !==
+      '0x0000000000000000000000000000000000000000000000000000000000000000' ?
+      data.initiation_tx :
       null;
 
   return (
@@ -183,26 +211,26 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
       ) }
 
       <DetailsInfoItem.Label
-        hint="Transaction's id which initiated intents execution"
+        hint="Transaction's id on Bitcoin network which indicates the future intent's execution desire and transfers assets to MIDL TSS Vault"
         isLoading={ isLoading }
       >
-        Trigger BTC tx hash
+        BTC dApp tx hash
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value flexWrap="nowrap">
         { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
         <Skeleton isLoaded={ !isLoading } overflow="hidden">
-          { btcTxHash ? (
-            <a href={ `https://regtest-mempool.midl.xyz/tx/${ data.btc_tx_hash }` }>
+          { btcDappTxHash ? (
+            <a href={ `https://regtest-mempool.midl.xyz/tx/${ data.btc_dapp_tx }` }>
               <Link>
-                <HashStringShortenDynamic hash={ data.btc_tx_hash || '' }/>
+                <HashStringShortenDynamic hash={ data.btc_dapp_tx || '' }/>
               </Link>
             </a>
           ) : (
             '-'
           ) }
         </Skeleton>
-        { btcTxHash && (
-          <CopyToClipboard text={ data.btc_tx_hash } isLoading={ isLoading }/>
+        { btcDappTxHash && (
+          <CopyToClipboard text={ data.btc_dapp_tx } isLoading={ isLoading }/>
         ) }
 
         { config.features.metasuites.isEnabled && (
@@ -222,32 +250,24 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         ) }
       </DetailsInfoItem.Value>
       <DetailsInfoItem.Label
-        hint="Unique character string (TxID) assigned to every verified transaction"
+        hint="Initiation tx hash during which Intent sender account receives virtual assets required for Intent's Batch execution"
         isLoading={ isLoading }
       >
-        MIDL intent execution id
+        Initiation Tx
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value flexWrap="nowrap">
         { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
         <Skeleton isLoaded={ !isLoading } overflow="hidden">
-          <HashStringShortenDynamic hash={ data.hash }/>
+          { initiationTx ? (
+            <a href={ `/tx/${ initiationTx }` }>
+              <Link>{ initiationTx }</Link>
+            </a>
+          ) : (
+            '-'
+          ) }
         </Skeleton>
-        <CopyToClipboard text={ data.hash } isLoading={ isLoading }/>
-
-        { config.features.metasuites.isEnabled && (
-          <>
-            <TextSeparator
-              color="gray.500"
-              flexShrink={ 0 }
-              display="none"
-              id="meta-suites__tx-explorer-separator"
-            />
-            <Box
-              display="none"
-              flexShrink={ 0 }
-              id="meta-suites__tx-explorer-link"
-            />
-          </>
+        { initiationTx && (
+          <CopyToClipboard text={ initiationTx } isLoading={ isLoading }/>
         ) }
       </DetailsInfoItem.Value>
 
@@ -256,6 +276,28 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value flexWrap="nowrap">
         <IntentsDrawer data={ data } isLoading={ isLoading }/>
+      </DetailsInfoItem.Value>
+
+      <DetailsInfoItem.Label
+        hint="Address (external) sending the transaction on Bitcoin Network"
+        isLoading={ isLoading }
+      >
+        Completion MIDL tx
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value flexWrap="nowrap">
+        { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
+        <Skeleton isLoaded={ !isLoading } overflow="hidden">
+          { completionTx ? (
+            <a href={ `/tx/${ completionTx }` }>
+              <Link>{ completionTx }</Link>
+            </a>
+          ) : (
+            '-'
+          ) }
+        </Skeleton>
+        { completionTx && (
+          <CopyToClipboard text={ completionTx } isLoading={ isLoading }/>
+        ) }
       </DetailsInfoItem.Value>
 
       <DetailsInfoItem.Label
@@ -301,23 +343,23 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         hint="Transaction's id for intent series finisher btc transaction which transfers outcome assets and change back to the user"
         isLoading={ isLoading }
       >
-        Validation BTC tx hash
+        BTC Result tx hash
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value flexWrap="nowrap">
         { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
         <Skeleton isLoaded={ !isLoading } overflow="hidden">
-          { btcTxHash ? (
-            <a href={ `https://regtest-mempool.midl.xyz/tx/${ data.btc_tx_hash }` }>
+          { btcResultTx ? (
+            <a href={ `https://regtest-mempool.midl.xyz/tx/${ data.btc_dapp_tx }` }>
               <Link>
-                <HashStringShortenDynamic hash={ data.btc_tx_hash || '' }/>
+                <HashStringShortenDynamic hash={ btcResultTx || '' }/>
               </Link>
             </a>
           ) : (
             '-'
           ) }
         </Skeleton>
-        { btcTxHash && (
-          <CopyToClipboard text={ data.btc_tx_hash } isLoading={ isLoading }/>
+        { btcDappTxHash && (
+          <CopyToClipboard text={ btcResultTx } isLoading={ isLoading }/>
         ) }
 
         { config.features.metasuites.isEnabled && (
@@ -591,16 +633,38 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
       />
 
       <DetailsInfoItem.Label
-        hint="Address (external or contract) sending the transaction"
+        hint="Address (external or contract) sending the transaction on MIDL"
         isLoading={ isLoading }
       >
-        From
+        From(MIDL)
       </DetailsInfoItem.Label>
       <DetailsInfoItem.Value columnGap={ 3 }>
         <AddressEntity address={ data.from } isLoading={ isLoading }/>
         { data.from.name && <Text>{ data.from.name }</Text> }
         { addressFromTags.length > 0 && (
           <Flex columnGap={ 3 }>{ addressFromTags }</Flex>
+        ) }
+      </DetailsInfoItem.Value>
+
+      <DetailsInfoItem.Label
+        hint="Address (external) sending the transaction on Bitcoin Network"
+        isLoading={ isLoading }
+      >
+        From(BTC)
+      </DetailsInfoItem.Label>
+      <DetailsInfoItem.Value flexWrap="nowrap">
+        { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
+        <Skeleton isLoaded={ !isLoading } overflow="hidden">
+          { btcAddress ? (
+            <a href={ `/address/${ btcAddress }` }>
+              <Link>{ btcAddress }</Link>
+            </a>
+          ) : (
+            '-'
+          ) }
+        </Skeleton>
+        { btcAddress && (
+          <CopyToClipboard text={ btcAddress } isLoading={ isLoading }/>
         ) }
       </DetailsInfoItem.Value>
 

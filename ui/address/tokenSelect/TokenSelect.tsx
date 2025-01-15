@@ -19,7 +19,7 @@ import TokenSelectMobile from './TokenSelectMobile';
 
 interface Props {
   onClick?: () => void;
-  btcAddress?: string;
+  btcAddress?: string | null;
 }
 
 const TokenSelect = ({ onClick, btcAddress }: Props) => {

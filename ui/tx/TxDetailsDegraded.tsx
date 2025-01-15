@@ -1,7 +1,12 @@
 import { Flex } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
-import type { Chain, GetBlockReturnType, GetTransactionReturnType, TransactionReceipt } from 'viem';
+import type {
+  Chain,
+  GetBlockReturnType,
+  GetTransactionReturnType,
+  TransactionReceipt,
+} from 'viem';
 
 import type { Transaction } from 'types/api/transaction';
 
@@ -10,7 +15,12 @@ import dayjs from 'lib/date/dayjs';
 import throwOnResourceLoadError from 'lib/errors/throwOnResourceLoadError';
 import hexToDecimal from 'lib/hexToDecimal';
 import { publicClient } from 'lib/web3/client';
-import { GET_BLOCK, GET_TRANSACTION, GET_TRANSACTION_RECEIPT, GET_TRANSACTION_CONFIRMATIONS } from 'stubs/RPC';
+import {
+  GET_BLOCK,
+  GET_TRANSACTION,
+  GET_TRANSACTION_RECEIPT,
+  GET_TRANSACTION_CONFIRMATIONS,
+} from 'stubs/RPC';
 import { unknownAddress } from 'ui/shared/address/utils';
 import ServiceDegradationWarning from 'ui/shared/alerts/ServiceDegradationWarning';
 import TestnetWarning from 'ui/shared/alerts/TestnetWarning';
@@ -33,7 +43,6 @@ interface Props {
 }
 
 const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
-
   const [ originalError ] = React.useState(txQuery.error);
 
   const query = useQuery<RpcResponseType, unknown, Transaction | null>({
@@ -43,23 +52,27 @@ const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
         throw new Error('No public RPC client');
       }
 
-      const tx = await publicClient.getTransaction({ hash: hash as `0x${ string }` });
+      const tx = await publicClient.getTransaction({
+        hash: hash as `0x${ string }`,
+      });
 
       if (!tx) {
         throw new Error('Not found');
       }
 
-      const txReceipt = await publicClient.getTransactionReceipt({ hash: hash as `0x${ string }` }).catch(() => null);
-      const block = await publicClient.getBlock({ blockHash: tx.blockHash }).catch(() => null);
+      const txReceipt = await publicClient
+        .getTransactionReceipt({ hash: hash as `0x${ string }` })
+        .catch(() => null);
+      const block = await publicClient
+        .getBlock({ blockHash: tx.blockHash })
+        .catch(() => null);
       const latestBlock = await publicClient.getBlock().catch(() => null);
-      const confirmations = latestBlock && block ? latestBlock.number - block.number + BigInt(1) : null;
+      const confirmations =
+        latestBlock && block ?
+          latestBlock.number - block.number + BigInt(1) :
+          null;
 
-      return [
-        tx,
-        txReceipt,
-        confirmations,
-        block,
-      ];
+      return [ tx, txReceipt, confirmations, block ];
     },
     select: (response) => {
       const [ tx, txReceipt, txConfirmations, block ] = response;
@@ -78,7 +91,9 @@ const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
         from: { ...unknownAddress, hash: tx.from as string },
         to: tx.to ? { ...unknownAddress, hash: tx.to as string } : null,
         hash: tx.hash as string,
-        timestamp: block?.timestamp ? dayjs.unix(Number(block.timestamp)).format() : null,
+        timestamp: block?.timestamp ?
+          dayjs.unix(Number(block.timestamp)).format() :
+          null,
         confirmation_duration: null,
         status,
         block_number: tx.blockNumber ? Number(tx.blockNumber) : null,
@@ -93,13 +108,21 @@ const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
         raw_input: tx.input,
         gas_used: txReceipt?.gasUsed?.toString() ?? null,
         gas_limit: tx.gas.toString(),
-        confirmations: txConfirmations && txConfirmations > 0 ? Number(txConfirmations) : 0,
+        confirmations:
+          txConfirmations && txConfirmations > 0 ? Number(txConfirmations) : 0,
         fee: {
-          value: txReceipt && gasPrice ? (txReceipt.gasUsed * gasPrice).toString() : null,
+          value:
+            txReceipt && gasPrice ?
+              (txReceipt.gasUsed * gasPrice).toString() :
+              null,
           type: 'actual',
         },
         created_contract: txReceipt?.contractAddress ?
-          { ...unknownAddress, hash: txReceipt.contractAddress, is_contract: true } :
+          {
+            ...unknownAddress,
+            hash: txReceipt.contractAddress,
+            is_contract: true,
+          } :
           null,
         result: '',
         priority_fee: null,
@@ -114,8 +137,12 @@ const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
         transaction_types: [],
         transaction_tag: null,
         actions: [],
-        btc_tx_hash: undefined,
-        intents: undefined
+        btc_dapp_tx: undefined,
+        completion_tx: undefined,
+        initiation_tx: undefined,
+        btc_address: undefined,
+        btc_result_tx: undefined,
+        intents: undefined,
       };
     },
     placeholderData: [
@@ -146,7 +173,11 @@ const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
 
   if (!query.data) {
     if (originalError && isCustomAppError(originalError)) {
-      throwOnResourceLoadError({ resource: 'tx', error: originalError, isError: true });
+      throwOnResourceLoadError({
+        resource: 'tx',
+        error: originalError,
+        isError: true,
+      });
     }
 
     return <DataFetchAlert/>;
@@ -156,7 +187,9 @@ const TxDetailsDegraded = ({ hash, txQuery }: Props) => {
     <>
       <Flex rowGap={ 2 } mb={ 6 } flexDir="column">
         <TestnetWarning isLoading={ query.isPlaceholderData }/>
-        { originalError?.status !== 404 && <ServiceDegradationWarning isLoading={ query.isPlaceholderData }/> }
+        { originalError?.status !== 404 && (
+          <ServiceDegradationWarning isLoading={ query.isPlaceholderData }/>
+        ) }
       </Flex>
       <TxInfo data={ query.data } isLoading={ query.isPlaceholderData }/>
     </>

@@ -1,10 +1,12 @@
+import { zeroAddress } from 'viem';
+
 import type { RawTracesResponse } from 'types/api/rawTrace';
 import type { Transaction, TransactionsStats } from 'types/api/transaction';
 
 import { ADDRESS_PARAMS } from './addressParams';
-import { zeroAddress } from 'viem';
 
-export const TX_HASH = '0x3ed9d81e7c1001bdda1caa1dc62c0acbbe3d2c671cdc20dc1e65efdaa4186967';
+export const TX_HASH =
+  '0x3ed9d81e7c1001bdda1caa1dc62c0acbbe3d2c671cdc20dc1e65efdaa4186967';
 
 export const TX: Transaction = {
   timestamp: '2022-11-11T11:11:11.000000Z',
@@ -29,11 +31,13 @@ export const TX: Transaction = {
   base_fee_per_gas: '24',
   from: ADDRESS_PARAMS,
   intents: [ { method: 'send', status: 'ok', hash: zeroAddress } ],
-  btc_tx_hash: 'TODO: btc_tx_hash',
+  btc_dapp_tx: 'a',
+  completion_tx: 'a',
+  initiation_tx: 'a',
+  btc_address: 'a',
+  btc_result_tx: 'a',
   token_transfers: null,
-  transaction_types: [
-    'coin_transfer',
-  ],
+  transaction_types: [ 'coin_transfer' ],
   gas_used: '21000',
   created_contract: null,
   position: 0,
@@ -46,19 +50,18 @@ export const TX: Transaction = {
   value: '42000420000000000000',
   max_priority_fee_per_gas: null,
   revert_reason: null,
-  confirmation_duration: [
-    0,
-    14545,
-  ],
+  confirmation_duration: [ 0, 14545 ],
   transaction_tag: null,
 };
 
 export const TX_ZKEVM_L2: Transaction = {
   ...TX,
   zkevm_batch_number: 12345,
-  zkevm_sequence_hash: '0x2b824349b320cfa72f292ab26bf525adb00083ba9fa097141896c3c8c74567cc',
+  zkevm_sequence_hash:
+    '0x2b824349b320cfa72f292ab26bf525adb00083ba9fa097141896c3c8c74567cc',
   zkevm_status: 'Confirmed by Sequencer',
-  zkevm_verify_hash: '0x2b824349b320cfa72f292ab26bf525adb00083ba9fa097141896c3c8c74567cc',
+  zkevm_verify_hash:
+    '0x2b824349b320cfa72f292ab26bf525adb00083ba9fa097141896c3c8c74567cc',
 };
 
 export const TX_RAW_TRACE: RawTracesResponse = [];

@@ -82,6 +82,7 @@ export default function useAddressQuery({ hash, isEnabled = true }: Params): Add
         has_validated_blocks: false,
         implementations: null,
         is_contract: false,
+        btc_address: null,
         is_verified: false,
         name: null,
         token: null,

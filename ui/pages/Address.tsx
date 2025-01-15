@@ -80,13 +80,11 @@ const AddressPageContent = () => {
     [ hash ],
   );
 
-  const btcAddress =
-    'bcrt1puwn2akldaf2hqv64kmkjt3lgutk4se8rlmr8rcpk2v0ygg6zqqtqzzjdq9';
-
   const checkDomainName = useCheckDomainNameParam(hash);
   const checkAddressFormat = useCheckAddressFormat(hash);
   const areQueriesEnabled = !checkDomainName && !checkAddressFormat;
   const addressQuery = useAddressQuery({ hash, isEnabled: areQueriesEnabled });
+  const btcAddress = addressQuery?.data?.btc_address;
 
   const addressTabsCountersQuery = useApiQuery('address_tabs_counters', {
     pathParams: { hash },
@@ -280,7 +278,7 @@ const AddressPageContent = () => {
       {
         id: 'runes_transfers', // Use a unique id
         title: 'Runes transfers',
-        count: 51,
+        count: btcAddress ? 51 : 0,
         component: (
           <AddressRunesTransfers
             btcAddress={ btcAddress }
@@ -398,6 +396,7 @@ const AddressPageContent = () => {
     ].filter(Boolean);
   }, [
     addressQuery.data,
+    btcAddress,
     contractTabs,
     addressTabsCountersQuery.data,
     userOpsAccountQuery.data,
@@ -676,7 +675,11 @@ const AddressPageContent = () => {
       { config.features.metasuites.isEnabled && (
         <Box display="none" id="meta-suites__address" data-ready={ !isLoading }/>
       ) }
-      <AddressDetails btcAddress={ btcAddress } addressQuery={ addressQuery } scrollRef={ tabsScrollRef }/>
+      <AddressDetails
+        btcAddress={ btcAddress }
+        addressQuery={ addressQuery }
+        scrollRef={ tabsScrollRef }
+      />
       { /* should stay before tabs to scroll up with pagination */ }
       <Box ref={ tabsScrollRef }></Box>
       { content }

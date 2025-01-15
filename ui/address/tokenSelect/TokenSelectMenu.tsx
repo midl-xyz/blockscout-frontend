@@ -27,7 +27,7 @@ interface RuneToken {
 }
 
 interface Props {
-  btcAddress?: string;
+  btcAddress?: string | null;
   searchTerm: string;
   erc20sort: Sort;
   erc1155sort: Sort;
