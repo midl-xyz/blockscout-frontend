@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import type { FormattedData } from './types';
 import type { TokenType } from 'types/api/token';
 
+import config from 'configs/app/chain';
 import { getTokenTypeName } from 'lib/token/tokenTypes';
 import IconSvg from 'ui/shared/IconSvg';
 import LinkInternal from 'ui/shared/links/LinkInternal';
@@ -60,7 +61,7 @@ const TokenSelectMenu = ({
       }
       try {
         const response = await fetch(
-          `https://regtest-mempool.midl.xyz/runes/v1/addresses/${ btcAddress }/balances`,
+          `${ config.mempoolUrl }/runes/v1/addresses/${ btcAddress }/balances`,
         );
         if (!response.ok) throw new Error('Failed to fetch Rune balances');
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

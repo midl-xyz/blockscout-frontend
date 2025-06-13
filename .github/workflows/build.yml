@@ -1,7 +1,8 @@
 name: Build & Publish
 
 on:
-  workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -29,7 +30,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:latest
-            ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.sha }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ github.repository }}:${{ github.event.release.tag_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

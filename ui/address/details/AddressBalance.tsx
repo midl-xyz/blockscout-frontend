@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import type { SocketMessage } from 'lib/socket/types';
 import type { Address } from 'types/api/address';
 
+import config from 'configs/app/chain';
 import { getResourceKey } from 'lib/api/useApiQuery';
 import useSocketChannel from 'lib/socket/useSocketChannel';
 import useSocketMessage from 'lib/socket/useSocketMessage';
@@ -72,7 +73,7 @@ const AddressBalance = ({ data, isLoading, btcAddress }: Props) => {
       if (btcAddress) {
         try {
           const response = await fetch(
-            `https://regtest-mempool.midl.xyz/api/address/${ btcAddress }`,
+            `${ config.mempoolUrl }/api/address/${ btcAddress }`,
           );
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

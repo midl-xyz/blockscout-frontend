@@ -220,7 +220,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
         <Skeleton isLoaded={ !isLoading } overflow="hidden">
           { btcDappTxHash ? (
-            <a href={ `https://regtest-mempool.midl.xyz/tx/${ data.btc_dapp_tx }` }>
+            <a href={ `${ config.chain.mempoolUrl }/tx/${ data.btc_dapp_tx }` }>
               <Link>
                 <HashStringShortenDynamic hash={ data.btc_dapp_tx || '' }/>
               </Link>
@@ -349,7 +349,7 @@ const TxInfo = ({ data, isLoading, socketStatus }: Props) => {
         { data.status === null && <Spinner mr={ 2 } size="sm" flexShrink={ 0 }/> }
         <Skeleton isLoaded={ !isLoading } overflow="hidden">
           { btcResultTx ? (
-            <a href={ `https://regtest-mempool.midl.xyz/tx/${ data.btc_dapp_tx }` }>
+            <a href={ `${ config.chain.mempoolUrl }/tx/${ data.btc_dapp_tx }` }>
               <Link>
                 <HashStringShortenDynamic hash={ btcResultTx || '' }/>
               </Link>
