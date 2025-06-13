@@ -606,6 +606,7 @@ const schema = yup
         otherwise: (schema) => schema,
       }),
     NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME: yup.string(),
+    NEXT_PUBLIC_NETWORK_MEMPOOL_URL: yup.string(),
     NEXT_PUBLIC_IS_TESTNET: yup.boolean(),
 
     // 3. API configuration
