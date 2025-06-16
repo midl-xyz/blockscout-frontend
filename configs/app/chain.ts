@@ -34,7 +34,7 @@ const chain = Object.freeze({
   tokenStandard: getEnvValue('NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME') || 'ERC',
   rpcUrl: getEnvValue('NEXT_PUBLIC_NETWORK_RPC_URL'),
   isTestnet: getEnvValue('NEXT_PUBLIC_IS_TESTNET') === 'true',
-  mempoolUrl: getEnvValue('NEXT_PUBLIC_NETWORK_MEMPOOL_URL') || 'https://mempool.regtest.midl.xyz',
+  mempoolUrl: getEnvValue('NEXT_PUBLIC_MEMPOOL_URL') || 'https://mempool.regtest.midl.xyz',
   verificationType,
 });
 

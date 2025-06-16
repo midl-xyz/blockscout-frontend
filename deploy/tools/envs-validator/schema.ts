@@ -606,7 +606,6 @@ const schema = yup
         otherwise: (schema) => schema,
       }),
     NEXT_PUBLIC_NETWORK_TOKEN_STANDARD_NAME: yup.string(),
-    NEXT_PUBLIC_NETWORK_MEMPOOL_URL: yup.string(),
     NEXT_PUBLIC_IS_TESTNET: yup.boolean(),
 
     // 3. API configuration
@@ -911,6 +910,7 @@ const schema = yup
 
     // Misc
     NEXT_PUBLIC_USE_NEXT_JS_PROXY: yup.boolean(),
+    NEXT_PUBLIC_MEMPOOL_URL: yup.string().test(urlTest),
   })
   .concat(accountSchema)
   .concat(adsBannerSchema)
